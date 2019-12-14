@@ -10,7 +10,12 @@ class AustraliaBOM(RMParser):
     parserEnabled = True
     parserInterval = 3600                    # Your parser running interval in seconds
     parserDebug = True                      # Don't show extra debug messages
-    params = {"city": "Toowoomba" }         # Internal params that can be changed with API call /parser/{id}/params
+    
+    # Internal params that can be changed with API call /parser/{id}/params
+    #   URL:    list of BOM products: http://www.bom.gov.au/catalogue/anon-ftp.shtml
+    #           this script uses the "Precis Forecast XML Package"
+    #               VIC: ftp://ftp.bom.gov.au/anon/gen/fwo/IDV10753.xml
+    params = { "city": "Melbourne","URL": "ftp://ftp.bom.gov.au/anon/gen/fwo/IDV10753.xml" }         
 
     def isEnabledForLocation(self, timezone, lat, long):
         return AustraliaBOM.parserEnabled
@@ -18,7 +23,7 @@ class AustraliaBOM(RMParser):
     # The function that will be executed must have this name
     def perform(self):
         # downloading data from a URL convenience function since other python libraries can be used
-        URL = "ftp://ftp.bom.gov.au/anon/gen/fwo/IDQ11295.xml"
+        URL = self.params["URL"]
         data = self.openURL(URL)
 
         if data is None:
